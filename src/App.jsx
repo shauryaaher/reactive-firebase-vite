@@ -8,11 +8,15 @@ import {
 import logo from "./assets/logo.svg";
 import "./App.css";
 
+function Spinner() {
+  return <img src={logo} className="App-logo" alt="logo" />;
+}
+
 function OtherData() {
   const reference = doc(useFirestore(), "reactive", "qhJUEMi9MDn2FZ4y5X4W");
   const document = useFirestoreDocData(reference);
   if (document.status === "loading") {
-    return <img src={logo} className="App-logo" alt="logo" />;
+    return <Spinner />;
   } else {
     return <h1>{document.data.field}</h1>;
   }
