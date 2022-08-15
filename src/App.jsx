@@ -1,9 +1,9 @@
-import { doc, getFirestore } from "firebase/firestore";
+import { collection, getFirestore, query } from "firebase/firestore";
 import {
   useFirestore,
-  useFirestoreDocData,
   useFirebaseApp,
   FirestoreProvider,
+  useFirestoreCollectionData,
 } from "reactfire";
 import logo from "./assets/logo.svg";
 import "./App.css";
@@ -12,21 +12,31 @@ function Spinner() {
   return <img src={logo} className="App-logo" alt="logo" />;
 }
 
-function OtherData() {
-  const reference = doc(useFirestore(), "reactive", "qhJUEMi9MDn2FZ4y5X4W");
-  const document = useFirestoreDocData(reference);
-  if (document.status === "loading") {
+function GetDataFromACollection() {
+  const firestoreHook = useFirestore();
+  const colData = collection(firestoreHook, "reactive");
+  const { status, data } = useFirestoreCollectionData(colData);
+  if (status === "loading") {
     return <Spinner />;
-  } else {
-    return <h1>{document.data.field}</h1>;
+  } else if (status === "success") {
+    return (
+      <>
+        <h1>This is a list of random facts</h1><br />
+        <ul>
+          {data.map((any) => {
+            return <li key={any.id}>{any.field}</li>;
+          })}
+        </ul>
+      </>
+    );
   }
 }
 
 function App() {
-  const instance = getFirestore(useFirebaseApp());
+  const firestore = getFirestore(useFirebaseApp());
   return (
-    <FirestoreProvider sdk={instance}>
-      <OtherData />
+    <FirestoreProvider sdk={firestore}>
+      <GetDataFromACollection />
     </FirestoreProvider>
   );
 }
