@@ -1,4 +1,4 @@
-import { collection, getFirestore, query } from "firebase/firestore";
+import { collection, getFirestore, orderBy, query } from "firebase/firestore";
 import {
   useFirestore,
   useFirebaseApp,
@@ -14,8 +14,9 @@ function Spinner() {
 
 function GetDataFromACollection() {
   const firestoreHook = useFirestore();
-  const colData = collection(firestoreHook, "reactive");
-  const { status, data } = useFirestoreCollectionData(colData);
+  const ref = collection(firestoreHook, "reactive");
+  const q = query(ref, orderBy("id", "desc"));
+  const { status, data } = useFirestoreCollectionData(q);
   if (status === "loading") {
     return <Spinner />;
   } else if (status === "success") {
