@@ -8,10 +8,16 @@ import {
 import logo from "./assets/logo.svg";
 import "./App.css";
 
+// 
 function Spinner() {
   return <img src={logo} className="App-logo" alt="logo" />;
 }
 
+/**
+ * This component gets data from a Cloud Firestore collection
+ * and displays the fields of the documents of the collection as a list.
+ * The 'id' field is used as a key for the `<li />` element.
+ */
 function GetDataFromACollection() {
   const firestoreHook = useFirestore();
   const ref = collection(firestoreHook, "reactive");
@@ -22,7 +28,8 @@ function GetDataFromACollection() {
   } else if (status === "success") {
     return (
       <>
-        <h1>This is a list of random facts</h1><br />
+        <h1>This is a list of random facts</h1>
+        <br />
         <ul>
           {data.map((any) => {
             return <li key={any.id}>{any.field}</li>;
@@ -30,6 +37,8 @@ function GetDataFromACollection() {
         </ul>
       </>
     );
+  } else {
+    return <h1>Sorry, an error occured while getting the facts</h1>;
   }
 }
 
