@@ -8,6 +8,7 @@ import {
 import logo from "./assets/logo.svg";
 import "./App.css";
 
+// 
 function Spinner() {
   return <img src={logo} className="App-logo" alt="logo" />;
 }
