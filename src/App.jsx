@@ -1,17 +1,22 @@
 import { collection, getFirestore, orderBy, query } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
+
 import {
   useFirestore,
   useFirebaseApp,
   FirestoreProvider,
   useFirestoreCollectionData,
+  AppCheckProvider,
+  PerformanceProvider,
+  usePerformance,
 } from "reactfire";
 import logo from "./assets/logo.svg";
 import "./App.css";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 /**
  * The React spinning logo in a component.
-*/
+ */
 function Spinner() {
   return <img src={logo} className="App-logo" alt="logo" />;
 }
@@ -23,7 +28,7 @@ function Spinner() {
  */
 function GetDataFromACollection() {
   const firestoreHook = useFirestore();
-  const perf = getPerformance(useFirebaseApp());
+  const perf = usePerformance();
   const ref = collection(firestoreHook, "reactive");
   const q = query(ref, orderBy("id", "desc"));
   const t = trace(perf, "fetchFirestoreData");
@@ -51,10 +56,21 @@ function GetDataFromACollection() {
 
 function App() {
   const firestore = getFirestore(useFirebaseApp());
+  const perf = getPerformance(useFirebaseApp());
+  const appCheck = initializeAppCheck(useFirebaseApp(), {
+    provider: new ReCaptchaV3Provider(
+      "6Ld2YMEhAAAAANBoXGiFIYlJN_FbQIMygFxO0Uji"
+    ),
+    isTokenAutoRefreshEnabled: true,
+  });
   return (
-    <FirestoreProvider sdk={firestore}>
-      <GetDataFromACollection />
-    </FirestoreProvider>
+    <AppCheckProvider sdk={appCheck}>
+      <PerformanceProvider sdk={perf}>
+        <FirestoreProvider sdk={firestore}>
+          <GetDataFromACollection />
+        </FirestoreProvider>
+      </PerformanceProvider>
+    </AppCheckProvider>
   );
 }
 
