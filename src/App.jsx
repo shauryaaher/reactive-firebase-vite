@@ -1,4 +1,5 @@
 import { collection, getFirestore, orderBy, query } from "firebase/firestore";
+import { getPerformance, trace } from "firebase/performance";
 import {
   useFirestore,
   useFirebaseApp,
@@ -8,7 +9,9 @@ import {
 import logo from "./assets/logo.svg";
 import "./App.css";
 
-// 
+/**
+ * The React spinning logo in a component.
+*/
 function Spinner() {
   return <img src={logo} className="App-logo" alt="logo" />;
 }
@@ -20,9 +23,13 @@ function Spinner() {
  */
 function GetDataFromACollection() {
   const firestoreHook = useFirestore();
+  const perf = getPerformance(useFirebaseApp());
   const ref = collection(firestoreHook, "reactive");
   const q = query(ref, orderBy("id", "desc"));
+  const t = trace(perf, "fetchFirestoreData");
+  t.start();
   const { status, data } = useFirestoreCollectionData(q);
+  t.stop();
   if (status === "loading") {
     return <Spinner />;
   } else if (status === "success") {
