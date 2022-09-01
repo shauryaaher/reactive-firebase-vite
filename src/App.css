@@ -4,6 +4,10 @@
   padding: 2rem;
 }
 
+#signOut {
+  width: 400px;
+}
+
 h1 {
   text-align: center;
 }

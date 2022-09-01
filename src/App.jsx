@@ -1,4 +1,9 @@
-import { collection, getFirestore, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getFirestore,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
 
 import {
@@ -9,10 +14,19 @@ import {
   AppCheckProvider,
   PerformanceProvider,
   usePerformance,
+  AuthProvider,
+  useAuth,
+  useSigninCheck,
 } from "reactfire";
 import logo from "./assets/logo.svg";
 import "./App.css";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 /**
  * The React spinning logo in a component.
@@ -26,7 +40,8 @@ function Spinner() {
  * and displays the fields of the documents of the collection as a list.
  * The 'id' field is used as a key for the `<li />` element.
  */
-function GetDataFromACollection() {
+
+function Firestore() {
   const firestoreHook = useFirestore();
   const perf = usePerformance();
   const ref = collection(firestoreHook, "reactive");
@@ -54,9 +69,57 @@ function GetDataFromACollection() {
   }
 }
 
+function Main() {
+  const auth = useAuth();
+  const { status, data: signInCheckResult } = useSigninCheck();
+  if (status === "loading") {
+    return <Spinner />;
+  }
+  if (signInCheckResult.signedIn === true) {
+    async function signTheUserOut() {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error(error);
+        return <h3>There was a problem signing out</h3>;
+      }
+    }
+    return (
+      <>
+        <center>
+          <button id="signOut" onClick={() => signTheUserOut()}>Sign out</button>
+        </center>
+        <Firestore />
+      </>
+    );
+  } else {
+    /**
+     * Signs in with Google.
+     */
+    async function google() {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error(error);
+        return <h3>There was a problem signing in</h3>;
+      }
+    }
+    return (
+      <>
+        <h1>Please sign in or create an account.</h1>
+        <center>
+          <button onClick={() => google()}>Sign in with Google</button>
+        </center>
+      </>
+    );
+  }
+}
+
 function App() {
   const firestore = getFirestore(useFirebaseApp());
   const perf = getPerformance(useFirebaseApp());
+  const auth = getAuth(useFirebaseApp());
   const appCheck = initializeAppCheck(useFirebaseApp(), {
     provider: new ReCaptchaV3Provider(
       "6Ld2YMEhAAAAANBoXGiFIYlJN_FbQIMygFxO0Uji"
@@ -65,11 +128,13 @@ function App() {
   });
   return (
     <AppCheckProvider sdk={appCheck}>
-      <PerformanceProvider sdk={perf}>
-        <FirestoreProvider sdk={firestore}>
-          <GetDataFromACollection />
-        </FirestoreProvider>
-      </PerformanceProvider>
+      <AuthProvider sdk={auth}>
+        <PerformanceProvider sdk={perf}>
+          <FirestoreProvider sdk={firestore}>
+            <Main />
+          </FirestoreProvider>
+        </PerformanceProvider>
+      </AuthProvider>
     </AppCheckProvider>
   );
 }
