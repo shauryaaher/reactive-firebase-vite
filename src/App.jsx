@@ -130,7 +130,7 @@ function App() {
   const firestore = getFirestore(a);
   const perf = getPerformance(a);
   const auth = getAuth(a);
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.APP_CHECK_SECRET;
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.APP_CHECK_SECRET;
   const appCheck = initializeAppCheck(a, {
     provider: new ReCaptchaV3Provider(
       "6Ld2YMEhAAAAANBoXGiFIYlJN_FbQIMygFxO0Uji"
