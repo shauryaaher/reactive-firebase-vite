@@ -1,9 +1,4 @@
-import {
-  collection,
-  getFirestore,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, getFirestore, orderBy, query } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
 
 import {
@@ -17,6 +12,7 @@ import {
   AuthProvider,
   useAuth,
   useSigninCheck,
+  useUser,
 } from "reactfire";
 import logo from "./assets/logo.svg";
 import "./App.css";
@@ -51,7 +47,14 @@ function Firestore() {
   const { status, data } = useFirestoreCollectionData(q);
   t.stop();
   if (status === "loading") {
-    return <Spinner />;
+    return (
+      <>
+        <center>
+          <Spinner />
+          <h1>Loading your facts....</h1>
+        </center>
+      </>
+    );
   } else if (status === "success") {
     return (
       <>
@@ -72,6 +75,10 @@ function Firestore() {
 function Main() {
   const auth = useAuth();
   const { status, data: signInCheckResult } = useSigninCheck();
+  const { status: s, data: d } = useUser();
+  if (s === "loading") {
+    return <Spinner />;
+  }
   if (status === "loading") {
     return <Spinner />;
   }
@@ -87,7 +94,10 @@ function Main() {
     return (
       <>
         <center>
-          <button id="signOut" onClick={() => signTheUserOut()}>Sign out</button>
+          <h1>Hello, {d.displayName}</h1>
+          <button id="signOut" onClick={() => signTheUserOut()}>
+            Sign out
+          </button>
         </center>
         <Firestore />
       </>
@@ -102,7 +112,6 @@ function Main() {
         await signInWithPopup(auth, provider);
       } catch (error) {
         console.error(error);
-        return <h3>There was a problem signing in</h3>;
       }
     }
     return (
@@ -117,10 +126,12 @@ function Main() {
 }
 
 function App() {
-  const firestore = getFirestore(useFirebaseApp());
-  const perf = getPerformance(useFirebaseApp());
-  const auth = getAuth(useFirebaseApp());
-  const appCheck = initializeAppCheck(useFirebaseApp(), {
+  const a = useFirebaseApp();
+  const firestore = getFirestore(a);
+  const perf = getPerformance(a);
+  const auth = getAuth(a);
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.APP_CHECK_SECRET;
+  const appCheck = initializeAppCheck(a, {
     provider: new ReCaptchaV3Provider(
       "6Ld2YMEhAAAAANBoXGiFIYlJN_FbQIMygFxO0Uji"
     ),
