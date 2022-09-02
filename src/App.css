@@ -3,6 +3,9 @@
   margin: 0 auto;
   padding: 2rem;
 }
+#user {
+  height: 25px;
+}
 
 #signOut {
   width: 100px;

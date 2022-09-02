@@ -1,6 +1,6 @@
 import { collection, getFirestore, orderBy, query } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
-
+import file from "./User.jpg";
 import {
   useFirestore,
   useFirebaseApp,
@@ -37,7 +37,7 @@ function Spinner() {
  * The 'id' field is used as a key for the `<li />` element.
  */
 
-function Firestore() {
+function FirestoreAndPerf() {
   const firestoreHook = useFirestore();
   const perf = usePerformance();
   const ref = collection(firestoreHook, "reactive");
@@ -93,13 +93,16 @@ function Main() {
     }
     return (
       <>
+        <h2 style={{ textAlign: "left" }}>
+          Hello, {d.displayName}!
+          <img id="user" src={file} />
+        </h2>
+        <FirestoreAndPerf />
         <center>
-          <h1>Hello, {d.displayName}</h1>
           <button id="signOut" onClick={() => signTheUserOut()}>
             Sign out
           </button>
         </center>
-        <Firestore />
       </>
     );
   } else {
@@ -130,7 +133,6 @@ function App() {
   const firestore = getFirestore(a);
   const perf = getPerformance(a);
   const auth = getAuth(a);
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.APP_CHECK_SECRET;
   const appCheck = initializeAppCheck(a, {
     provider: new ReCaptchaV3Provider(
       "6Ld2YMEhAAAAANBoXGiFIYlJN_FbQIMygFxO0Uji"
