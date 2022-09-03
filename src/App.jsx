@@ -78,10 +78,6 @@ function FirestoreAndPerf() {
 function Main() {
   const auth = useAuth();
   const { status, data: signInCheckResult } = useSigninCheck();
-  const { status: s, data: d } = useUser();
-  if (s === "loading") {
-    return <Spinner />;
-  }
   if (status === "loading") {
     return <Spinner />;
   }
@@ -96,10 +92,6 @@ function Main() {
     }
     return (
       <>
-        <h2 style={{ textAlign: "left" }}>
-          Hello, {d.displayName}!
-          <img id="user" src={file} />
-        </h2>
         <FirestoreAndPerf />
         <center>
           <button id="signOut" onClick={() => signTheUserOut()}>
