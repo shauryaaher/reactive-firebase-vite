@@ -142,7 +142,10 @@ function Main() {
         email = window.prompt("Please enter your email for confirmation");
       }
       signInWithEmailLink(auth, second, window.location.href)
-        .then(() => window.localStorage.removeItem("email"))
+        .then(() => {
+          window.localStorage.removeItem("email");
+          window.location.replace("https://facts-site.web.app");
+        })
         .catch((error) => console.error(error));
     }
     return (
