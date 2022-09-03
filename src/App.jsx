@@ -122,7 +122,7 @@ function Main() {
     }
     function signInWithLink() {
       const actionCodeSettings = {
-        url: "http://localhost:5173/",
+        url: "http://facts-site.web.app/",
         handleCodeInApp: true,
       };
       const email = document.querySelector("#em").value;
@@ -132,6 +132,9 @@ function Main() {
           self.localStorage.setItem("email", email);
         })
         .catch((error) => console.error(error));
+      alert(
+        "The sign in link is sent to the email you entered. Please check the spam folder if the email is not present in your inbox."
+      );
     }
     if (isSignInWithEmailLink(auth, window.location.href) === true) {
       let second = window.localStorage.getItem("email");
@@ -156,6 +159,9 @@ function Main() {
           <br />
           <br />
           <button onClick={() => signInWithLink()}>Send an email link</button>
+          <br />
+          <br />
+          <span id="confirmation" style={{ visibility: "hidden" }}></span>
         </center>
       </>
     );
