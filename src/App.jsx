@@ -20,6 +20,9 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import {
   getAuth,
   GoogleAuthProvider,
+  isSignInWithEmailLink,
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -117,11 +120,42 @@ function Main() {
         console.error(error);
       }
     }
+    function signInWithLink() {
+      const actionCodeSettings = {
+        url: "http://localhost:5173/",
+        handleCodeInApp: true,
+      };
+      const email = document.querySelector("#em").value;
+      sendSignInLinkToEmail(auth, email, actionCodeSettings)
+        .then(() => {
+          console.log("Successfully sent a link");
+          self.localStorage.setItem("email", email);
+        })
+        .catch((error) => console.error(error));
+    }
+    if (isSignInWithEmailLink(auth, window.location.href) === true) {
+      let second = window.localStorage.getItem("email");
+      if (!second) {
+        email = window.prompt("Please enter your email for confirmation");
+      }
+      signInWithEmailLink(auth, second, window.location.href)
+        .then(() => window.localStorage.removeItem("email"))
+        .catch((error) => console.error(error));
+    }
     return (
       <>
         <h1>Please sign in or create an account.</h1>
         <center>
           <button onClick={() => google()}>Sign in with Google</button>
+          <br />
+          <br />
+          <span>OR</span>
+          <br />
+          <br />
+          <input id="em" type="email" placeholder="Enter your email..." />
+          <br />
+          <br />
+          <button onClick={() => signInWithLink()}>Send an email link</button>
         </center>
       </>
     );
