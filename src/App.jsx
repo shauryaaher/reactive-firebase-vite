@@ -19,9 +19,6 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import {
   getAuth,
   GoogleAuthProvider,
-  isSignInWithEmailLink,
-  sendSignInLinkToEmail,
-  signInWithEmailLink,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -111,34 +108,6 @@ function Main() {
       } catch (error) {
         console.error(error);
       }
-    }
-    function signInWithLink() {
-      const actionCodeSettings = {
-        url: "http://facts-site.web.app/",
-        handleCodeInApp: true,
-      };
-      const email = document.querySelector("#em").value;
-      sendSignInLinkToEmail(auth, email, actionCodeSettings)
-        .then(() => {
-          console.log("Successfully sent a link");
-          self.localStorage.setItem("email", email);
-        })
-        .catch((error) => console.error(error));
-      alert(
-        "The sign in link is sent to the email you entered. Please check the spam folder if the email is not present in your inbox."
-      );
-    }
-    if (isSignInWithEmailLink(auth, window.location.href) === true) {
-      let second = window.localStorage.getItem("email");
-      if (!second) {
-        email = window.prompt("Please enter your email for confirmation");
-      }
-      signInWithEmailLink(auth, second, window.location.href)
-        .then(() => {
-          window.localStorage.removeItem("email");
-          window.location.replace("https://facts-site.web.app");
-        })
-        .catch((error) => console.error(error));
     }
     return (
       <>
