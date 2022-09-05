@@ -145,18 +145,6 @@ function Main() {
         <h1>Please sign in or create an account.</h1>
         <center>
           <button onClick={() => google()}>Sign in with Google</button>
-          <br />
-          <br />
-          <span>OR</span>
-          <br />
-          <br />
-          <input id="em" type="email" placeholder="Enter your email..." />
-          <br />
-          <br />
-          <button onClick={() => signInWithLink()}>Send an email link</button>
-          <br />
-          <br />
-          <span id="confirmation" style={{ visibility: "hidden" }}></span>
         </center>
       </>
     );
