@@ -1,6 +1,5 @@
 import { collection, getFirestore, orderBy, query } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
-import file from "./User.jpg";
 import {
   useFirestore,
   useFirebaseApp,
@@ -12,7 +11,7 @@ import {
   AuthProvider,
   useAuth,
   useSigninCheck,
-  useUser,
+  AnalyticsProvider,
 } from "reactfire";
 import logo from "./assets/logo.svg";
 import "./App.css";
@@ -26,6 +25,7 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 
 /**
  * The React spinning logo in a component.
@@ -153,6 +153,7 @@ function Main() {
 
 function App() {
   const a = useFirebaseApp();
+  const analytics = getAnalytics(a);
   const firestore = getFirestore(a);
   const perf = getPerformance(a);
   const auth = getAuth(a);
@@ -165,11 +166,13 @@ function App() {
   return (
     <AppCheckProvider sdk={appCheck}>
       <AuthProvider sdk={auth}>
-        <PerformanceProvider sdk={perf}>
-          <FirestoreProvider sdk={firestore}>
-            <Main />
-          </FirestoreProvider>
-        </PerformanceProvider>
+        <AnalyticsProvider sdk={analytics}>
+          <PerformanceProvider sdk={perf}>
+            <FirestoreProvider sdk={firestore}>
+              <Main />
+            </FirestoreProvider>
+          </PerformanceProvider>
+        </AnalyticsProvider>
       </AuthProvider>
     </AppCheckProvider>
   );

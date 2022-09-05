@@ -9,7 +9,8 @@ const firebaseConfig = {
   projectId: "facts-site",
   storageBucket: "facts-site.appspot.com",
   messagingSenderId: "565052035575",
-  appId: "1:565052035575:web:8a0f2e1ef80070dc789ef2"
+  appId: "1:565052035575:web:8a0f2e1ef80070dc789ef2",
+  measurementId: "G-FRD4Z8ECY6",
 };
 
 createRoot(document.getElementById("root")).render(
