@@ -1,4 +1,9 @@
-import { collection, getFirestore, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getFirestore,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
 import {
   useFirestore,
@@ -12,6 +17,7 @@ import {
   useAuth,
   useSigninCheck,
   AnalyticsProvider,
+  useUser,
 } from "reactfire";
 import logo from "./assets/logo.svg";
 import "./App.css";
@@ -72,6 +78,19 @@ function FirestoreAndPerf() {
   }
 }
 
+function UserState() {
+  const { status, data } = useUser();
+  if (status === "loading") {
+    return <Spinner />;
+  } else if (status === "error") {
+    return (
+      <h3 className="class">There was an error fetching your user data</h3>
+    );
+  } else {
+    return <h3>Hello, {data.displayName}.</h3>;
+  }
+}
+
 function Main() {
   const auth = useAuth();
   const { status, data: signInCheckResult } = useSigninCheck();
@@ -89,6 +108,7 @@ function Main() {
     }
     return (
       <>
+        <UserState />
         <FirestoreAndPerf />
         <center>
           <button id="signOut" onClick={() => signTheUserOut()}>
