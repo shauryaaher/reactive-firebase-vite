@@ -23,6 +23,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
+import { useState } from "react";
 
 /**
  * The React spinning logo in a component.
@@ -35,6 +36,7 @@ function Spinner() {
  * This component gets data from a Cloud Firestore collection
  * and displays the fields of the documents of the collection as a list.
  * The 'id' field is used as a key for the `<li />` element.
+ * It works just fine.
  */
 
 function FirestoreAndPerf() {
@@ -120,6 +122,12 @@ function Main() {
   }
 }
 
+function Compy() {
+  const [time, setTime] = useState(Date.now());
+  setInterval(() => setTime(Date.now()), 1000000000000);
+  return <center><h4>Number of milliseconds passed since the Unix Epoch (January 1 1970), {time}</h4></center>;
+}
+
 function App() {
   const a = useFirebaseApp();
   const analytics = getAnalytics(a);
@@ -139,6 +147,7 @@ function App() {
           <PerformanceProvider sdk={perf}>
             <FirestoreProvider sdk={firestore}>
               <Main />
+              <Compy />
             </FirestoreProvider>
           </PerformanceProvider>
         </AnalyticsProvider>
