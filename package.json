@@ -15,9 +15,16 @@
     "reactfire": "^4.2.2"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
     "vite": "^3.1.4"
+=======
+    "@types/react": "^18.0.20",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.1.0",
+    "vite": "^3.1.3"
+>>>>>>> 09380845fb9e2b98bb690ba48d57a7da6cb203e2
   }
 }
