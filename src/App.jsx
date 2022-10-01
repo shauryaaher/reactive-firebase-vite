@@ -142,7 +142,7 @@ function Main() {
   }
 }
 
-function Compy() {
+function CompyTime() {
   const [time, setTime] = useState(Date.now());
   setInterval(() => setTime(Date.now()), 1000000000000);
   return <center><h4>Number of milliseconds passed since the Unix Epoch (January 1 1970), {time}</h4></center>;
@@ -167,7 +167,7 @@ function App() {
           <PerformanceProvider sdk={perf}>
             <FirestoreProvider sdk={firestore}>
               <Main />
-              <Compy />
+              <CompyTime />
             </FirestoreProvider>
           </PerformanceProvider>
         </AnalyticsProvider>
