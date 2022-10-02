@@ -1,9 +1,4 @@
-import {
-  collection,
-  getFirestore,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, getFirestore, orderBy, query } from "firebase/firestore";
 import { getPerformance, trace } from "firebase/performance";
 import {
   useFirestore,
@@ -29,7 +24,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * The React spinning logo in a component.
@@ -144,8 +139,20 @@ function Main() {
 
 function CompyTime() {
   const [time, setTime] = useState(Date.now());
-  setInterval(() => setTime(Date.now()), 1000000000000);
-  return <center><h4>Number of milliseconds passed since the Unix Epoch (January 1 1970), {time}</h4></center>;
+  useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), 1000000000000);
+    return () => {
+      clearInterval(interval);
+    }
+  });
+  return (
+    <center>
+      <h4>
+        Number of milliseconds passed since the Unix Epoch (January 1 1970),{" "}
+        {time}
+      </h4>
+    </center>
+  );
 }
 
 function App() {
