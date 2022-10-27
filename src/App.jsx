@@ -22,6 +22,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+  TwitterAuthProvider,
 } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { useEffect, useState } from "react";
@@ -122,15 +123,27 @@ function Main() {
       const provider = new GoogleAuthProvider();
       try {
         await signInWithPopup(auth, provider);
+        console.log("Signed in with Google.");
       } catch (error) {
         console.error(error);
       }
+    }
+    async function twitter() {
+      const provider = new TwitterAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(() => {
+          console.log("Signed in with Twitter.");
+        })
+        .catch((error) => console.error(error));
     }
     return (
       <>
         <h1>Please sign in or create an account.</h1>
         <center>
           <button onClick={() => google()}>Sign in with Google</button>
+          <br />
+          <br />
+          <button onClick={() => twitter()}>Sign in with Twitter</button>
         </center>
       </>
     );
