@@ -1,13 +1,10 @@
-import { collection, getFirestore, orderBy, query } from "firebase/firestore";
-import { getPerformance, trace } from "firebase/performance";
+import { getFirestore } from "firebase/firestore";
+import { getPerformance } from "firebase/performance";
 import {
-  useFirestore,
   useFirebaseApp,
   FirestoreProvider,
-  useFirestoreCollectionData,
   AppCheckProvider,
   PerformanceProvider,
-  usePerformance,
   AuthProvider,
   useAuth,
   useSigninCheck,
@@ -28,7 +25,6 @@ import { Spinner } from "./Spinner.jsx";
 const CompyTime = lazy(() => import("./Time.jsx"));
 const UserState = lazy(() => import("./UserState.jsx"));
 const FirestoreAndPerf = lazy(() => import("./FirestoreAndPerf.jsx"));
-
 
 function Main() {
   const auth = useAuth();
@@ -106,7 +102,7 @@ function App() {
   return (
     <AppCheckProvider sdk={appCheck}>
       <AuthProvider sdk={auth}>
-        <AnalyticsProvider sdk={analytics}>
+        <Analytics sdk={analytics}>
           <PerformanceProvider sdk={perf}>
             <FirestoreProvider sdk={firestore}>
               <Main />
@@ -115,7 +111,7 @@ function App() {
               </Suspense>
             </FirestoreProvider>
           </PerformanceProvider>
-        </AnalyticsProvider>
+        </Analytics>
       </AuthProvider>
     </AppCheckProvider>
   );
