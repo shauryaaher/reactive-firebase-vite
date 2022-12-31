@@ -102,7 +102,7 @@ function App() {
   return (
     <AppCheckProvider sdk={appCheck}>
       <AuthProvider sdk={auth}>
-        <Analytics sdk={analytics}>
+        <AnalyticsProvider sdk={analytics}>
           <PerformanceProvider sdk={perf}>
             <FirestoreProvider sdk={firestore}>
               <Main />
@@ -111,7 +111,7 @@ function App() {
               </Suspense>
             </FirestoreProvider>
           </PerformanceProvider>
-        </Analytics>
+        </AnalyticsProvider>
       </AuthProvider>
     </AppCheckProvider>
   );
